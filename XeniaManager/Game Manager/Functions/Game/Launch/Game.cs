@@ -3,6 +3,7 @@ using System.Text.RegularExpressions;
 
 // Imported
 using Serilog;
+using XeniaManager.Input;
 
 namespace XeniaManager
 {
@@ -13,7 +14,7 @@ namespace XeniaManager
         /// </summary>
         /// <param name="game">The game user wants to launch.</param>
         /// <param name="windowedMode">Check if the game should be in Windowed Mode.</param>
-        public static void LaunchGame(Game game, bool windowedMode = false)
+        public static async Task LaunchGame(Game game, bool windowedMode = false)
         {
             Log.Information($"Launching {game.Title}");
             Process xenia = new Process();
@@ -111,7 +112,16 @@ namespace XeniaManager
             xenia.BeginOutputReadLine();
 
             // Wait for the emulator to exit
-            xenia.WaitForExit(); // Blocking call to wait for emulator to close
+            while (!xenia.HasExited)
+            {
+                if (InputManager.IsGuideButtonPressed())
+                {
+                    Log.Information("Guide button pressed. Killing emulator...");
+                    xenia.Kill();
+                    break;
+                }
+                await Task.Delay(100);
+            }
 
             // Calculate playtime after the emulator has closed
             TimeSpan playTime = DateTime.Now - timeBeforeLaunch;

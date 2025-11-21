@@ -1,12 +1,15 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Threading;
+using System.Threading.Tasks;
 
 // Imported
 using Microsoft.Win32;
 using Serilog;
 using XeniaManager.DesktopApp.CustomControls;
 using XeniaManager.DesktopApp.Windows;
+using XeniaManager.Input;
 
 namespace XeniaManager.DesktopApp.Pages
 {
@@ -156,6 +159,124 @@ namespace XeniaManager.DesktopApp.Pages
                         gameButton.Visibility = Visibility.Collapsed; // Hide it if it doesn't match
                     }
                 }
+            }
+        }
+
+        private CancellationTokenSource _inputCts;
+
+        private async void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            _inputCts = new CancellationTokenSource();
+            try
+            {
+                await ControllerInputLoop(_inputCts.Token);
+            }
+            catch (OperationCanceledException) { }
+        }
+
+        private void Page_Unloaded(object sender, RoutedEventArgs e)
+        {
+            _inputCts?.Cancel();
+        }
+
+        private async Task ControllerInputLoop(CancellationToken token)
+        {
+            int selectedIndex = -1;
+            DateTime lastInputTime = DateTime.MinValue;
+
+            while (!token.IsCancellationRequested)
+            {
+                // Check if window is visible (game not running)
+                if (Application.Current.MainWindow.Visibility != Visibility.Visible)
+                {
+                    await Task.Delay(500, token);
+                    continue;
+                }
+
+                if (InputManager.IsConnected)
+                {
+                    if ((DateTime.Now - lastInputTime).TotalMilliseconds > 150)
+                    {
+                        bool inputDetected = false;
+                        var visibleChildren = WpGameLibrary.Children.OfType<GameButton>().Where(b => b.Visibility == Visibility.Visible).ToList();
+                        
+                        if (visibleChildren.Count > 0)
+                        {
+                            // Initialize selection if needed
+                            if (selectedIndex == -1 || selectedIndex >= visibleChildren.Count)
+                            {
+                                // Try to find currently focused item
+                                int focusedIndex = -1;
+                                for(int i=0; i<visibleChildren.Count; i++)
+                                {
+                                    if (visibleChildren[i].IsFocused)
+                                    {
+                                        focusedIndex = i;
+                                        break;
+                                    }
+                                }
+                                
+                                if (focusedIndex != -1) selectedIndex = focusedIndex;
+                                else selectedIndex = 0;
+                                
+                                visibleChildren[selectedIndex].Focus();
+                            }
+
+                            if (InputManager.IsDpadRightPressed())
+                            {
+                                selectedIndex++;
+                                if (selectedIndex >= visibleChildren.Count) selectedIndex = 0;
+                                inputDetected = true;
+                            }
+                            else if (InputManager.IsDpadLeftPressed())
+                            {
+                                selectedIndex--;
+                                if (selectedIndex < 0) selectedIndex = visibleChildren.Count - 1;
+                                inputDetected = true;
+                            }
+                            else if (InputManager.IsDpadDownPressed())
+                            {
+                                // Estimate items per row based on width
+                                // Assuming ~160px per item (150 width + 10 margin)
+                                double panelWidth = WpGameLibrary.ActualWidth;
+                                int itemsPerRow = (int)(panelWidth / 160);
+                                if (itemsPerRow < 1) itemsPerRow = 1;
+                                
+                                selectedIndex += itemsPerRow;
+                                if (selectedIndex >= visibleChildren.Count) selectedIndex = visibleChildren.Count - 1;
+                                inputDetected = true;
+                            }
+                            else if (InputManager.IsDpadUpPressed())
+                            {
+                                double panelWidth = WpGameLibrary.ActualWidth;
+                                int itemsPerRow = (int)(panelWidth / 160);
+                                if (itemsPerRow < 1) itemsPerRow = 1;
+                                
+                                selectedIndex -= itemsPerRow;
+                                if (selectedIndex < 0) selectedIndex = 0;
+                                inputDetected = true;
+                            }
+
+                            if (inputDetected)
+                            {
+                                visibleChildren[selectedIndex].Focus();
+                                visibleChildren[selectedIndex].BringIntoView();
+                                lastInputTime = DateTime.Now;
+                            }
+
+                            if (InputManager.IsAPressed())
+                            {
+                                // Debounce A button more
+                                if ((DateTime.Now - lastInputTime).TotalMilliseconds > 500)
+                                {
+                                    visibleChildren[selectedIndex].RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+                                    lastInputTime = DateTime.Now.AddSeconds(1); // Extra delay
+                                }
+                            }
+                        }
+                    }
+                }
+                await Task.Delay(33, token); // ~30fps polling
             }
         }
     }
