@@ -24,7 +24,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 8.x # Adjust this version when updating to .NET 9
+          dotnet-version: 9.x # Adjust this version when updating to .NET 9
 
       - name: Restore dependencies
         run: dotnet restore "XeniaManager.DesktopApp/XeniaManager.DesktopApp.csproj"
