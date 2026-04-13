@@ -194,10 +194,15 @@
                                 Tapped="OnGameButtonTapped"
                                 DoubleTapped="OnGameButtonDoubleTapped"
                                 Tag="{Binding}"
-                                Classes.selected="{Binding IsSelected}">
+                                Classes.selected="{Binding IsSelected}"
+                                Classes.controllerSelected="{Binding IsControllerSelected}">
                             <Button.Styles>
                                 <Style Selector="Button.selected">
                                     <Setter Property="BorderBrush" Value="{DynamicResource AccentFillColorDefaultBrush}" />
+                                </Style>
+                                <Style Selector="Button.controllerSelected">
+                                    <Setter Property="BorderBrush" Value="DarkBlue" />
+                                    <Setter Property="BorderThickness" Value="4" />
                                 </Style>
                             </Button.Styles>
                             <ToolTip.Tip>

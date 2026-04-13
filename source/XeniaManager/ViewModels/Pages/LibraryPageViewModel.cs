@@ -28,6 +28,7 @@ using XeniaManager.Core.Settings.Sections;
 using XeniaManager.Core.Utilities;
 using XeniaManager.Services;
 using XeniaManager.ViewModels.Items;
+using Logger = XeniaManager.Core.Logging.Logger;
 
 namespace XeniaManager.ViewModels.Pages;
 
@@ -151,11 +152,84 @@ public partial class LibraryPageViewModel : ViewModelBase
     {
         _settings = App.Services.GetRequiredService<Settings>();
         _messageBoxService = App.Services.GetRequiredService<IMessageBoxService>();
+        _gamepadInputService = App.Services.GetRequiredService<GamepadInputService>();
 
-        // Load UI settings
+        _gamepadInputService.SelectionChanged += OnGamepadSelectionChanged;
+        _gamepadInputService.ButtonXPressed += OnGamepadButtonXPressed;
+        _gamepadInputService.ButtonPSPressed += OnGamepadButtonPSPressed;
+
         LoadUiSettings();
 
         RefreshLibrary();
+    }
+
+    private GamepadInputService _gamepadInputService { get; set; }
+
+    [ObservableProperty] private int _controllerSelectedIndex = -1;
+    partial void OnControllerSelectedIndexChanged(int value)
+    {
+        if (value >= 0 && value < Games.Count)
+        {
+            for (int i = 0; i < Games.Count; i++)
+            {
+                Games[i].IsControllerSelected = i == value;
+            }
+        }
+    }
+
+    [ObservableProperty] private bool _isControllerNavigating = false;
+
+    public event EventHandler? QuitRequested;
+
+    private void OnGamepadSelectionChanged(object? sender, int newIndex)
+    {
+        Dispatcher.UIThread.Post(() =>
+        {
+            ControllerSelectedIndex = newIndex;
+        });
+    }
+
+    private void OnGamepadButtonXPressed(object? sender, EventArgs e)
+    {
+        Dispatcher.UIThread.Post(async () =>
+        {
+            if (ControllerSelectedIndex >= 0 && ControllerSelectedIndex < Games.Count)
+            {
+                GameItemViewModel selectedGame = Games[ControllerSelectedIndex];
+                if (selectedGame.LaunchCommand.CanExecute(null))
+                {
+                    selectedGame.LaunchCommand.Execute(null);
+                }
+            }
+        });
+    }
+
+    private void OnGamepadButtonPSPressed(object? sender, EventArgs e)
+    {
+        Dispatcher.UIThread.Post(() =>
+        {
+            QuitRequested?.Invoke(this, EventArgs.Empty);
+        });
+    }
+
+    public void StartGamepadInput()
+    {
+        _gamepadInputService.Start();
+        if (Games.Count > 0)
+        {
+            ControllerSelectedIndex = 0;
+            _gamepadInputService.SetSelectedIndex(0);
+        }
+    }
+
+    public void StopGamepadInput()
+    {
+        _gamepadInputService.Stop();
+    }
+
+    public void UpdateGamepadGridColumns(int columns)
+    {
+        _gamepadInputService.SetGridColumns(columns);
     }
 
     /// <summary>

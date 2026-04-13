@@ -70,6 +70,8 @@ public class ServiceConfigurator
         services.AddSingleton<INotificationService, NotificationService>();
         // ReleaseService
         services.AddSingleton<IReleaseService, ReleaseService>();
+        // GamepadInputService
+        services.AddSingleton<GamepadInputService>();
 
         // Controls
         services.AddSingleton<PatchSelectionDialogViewModel>();

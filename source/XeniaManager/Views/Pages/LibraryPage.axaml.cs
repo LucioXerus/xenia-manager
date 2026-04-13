@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
+using Avalonia.Threading;
 using Microsoft.Extensions.DependencyInjection;
 using XeniaManager.ViewModels.Items;
 using XeniaManager.ViewModels.Pages;
@@ -11,37 +13,83 @@ namespace XeniaManager.Views.Pages;
 
 public partial class LibraryPage : UserControl
 {
-    // Variables
     private LibraryPageViewModel _viewModel { get; set; }
     private GameItemViewModel? _lastSelectedGame;
+    private bool _isGamepadNavigating = false;
 
-    // Constructor
     public LibraryPage()
     {
         InitializeComponent();
         _viewModel = App.Services.GetRequiredService<LibraryPageViewModel>();
         DataContext = _viewModel;
+
+        _viewModel.QuitRequested += OnQuitRequested;
     }
 
-    // Events
+    private async void OnQuitRequested(object? sender, EventArgs e)
+    {
+        await Dispatcher.UIThread.InvokeAsync(async () =>
+        {
+            if (App.MainWindow != null)
+            {
+                App.MainWindow.Close();
+            }
+        });
+    }
+
+    protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        base.OnAttachedToVisualTree(e);
+
+        Dispatcher.UIThread.Post(() =>
+        {
+            _viewModel.StartGamepadInput();
+            UpdateGridColumnsForGamepad();
+        });
+    }
+
+    protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        base.OnDetachedFromVisualTree(e);
+        _viewModel.StopGamepadInput();
+    }
+
+    private void UpdateGridColumnsForGamepad()
+    {
+        if (Bounds.Width > 0 && _viewModel.MinItemWidth > 0)
+        {
+            int columns = Math.Max(1, (int)(Bounds.Width / (_viewModel.MinItemWidth + _viewModel.ItemSpacing)));
+            _viewModel.UpdateGamepadGridColumns(columns);
+        }
+    }
+
+    protected override void OnSizeChanged(SizeChangedEventArgs e)
+    {
+        base.OnSizeChanged(e);
+        UpdateGridColumnsForGamepad();
+    }
+
     private void OnGameButtonTapped(object? sender, TappedEventArgs e)
     {
         if (sender is Button { DataContext: GameItemViewModel vm })
         {
-            // Handle multiselect with modifiers
             if (IsMultiselectModifierPressed(e))
             {
                 HandleGameSelection(vm, e);
             }
-            // Launch game if not in multiselect mode and no selection active
             else if (!_viewModel.DoubleClickLaunch && !_viewModel.HasSelectedGames)
             {
+                if (_isGamepadNavigating)
+                {
+                    _isGamepadNavigating = false;
+                    return;
+                }
+
                 if (vm.LaunchCommand.CanExecute(null))
                 {
                     vm.LaunchCommand.Execute(null);
                 }
             }
-            // If there are selected games, single click adds to selection
             else if (_viewModel.HasSelectedGames)
             {
                 HandleGameSelection(vm, e);
@@ -53,9 +101,14 @@ public partial class LibraryPage : UserControl
     {
         if (_viewModel.DoubleClickLaunch && sender is Button { DataContext: GameItemViewModel vm })
         {
-            // Don't launch on double tap if multiselect modifier is pressed
             if (!IsMultiselectModifierPressed(e) && !_viewModel.HasSelectedGames)
             {
+                if (_isGamepadNavigating)
+                {
+                    _isGamepadNavigating = false;
+                    return;
+                }
+
                 if (vm.LaunchCommand.CanExecute(null))
                 {
                     vm.LaunchCommand.Execute(null);
@@ -66,7 +119,6 @@ public partial class LibraryPage : UserControl
 
     private bool IsMultiselectModifierPressed(TappedEventArgs e)
     {
-        // Check for Ctrl (multi-add) or Shift (range select)
         return e.KeyModifiers.HasFlag(KeyModifiers.Control) ||
                e.KeyModifiers.HasFlag(KeyModifiers.Shift);
     }
@@ -79,7 +131,6 @@ public partial class LibraryPage : UserControl
 
         if (e.KeyModifiers.HasFlag(KeyModifiers.Shift) && _lastSelectedGame != null)
         {
-            // Shift+Click: Range select
             int lastIndex = games.IndexOf(_lastSelectedGame);
             if (lastIndex >= 0)
             {
@@ -93,13 +144,11 @@ public partial class LibraryPage : UserControl
         }
         else if (e.KeyModifiers.HasFlag(KeyModifiers.Control))
         {
-            // Ctrl+Click: Toggle selection
             clickedGame.IsSelected = !clickedGame.IsSelected;
             _lastSelectedGame = clickedGame;
         }
         else
         {
-            // Normal click with selection active: clear others and select only this one
             foreach (GameItemViewModel game in games)
             {
                 game.IsSelected = false;
@@ -111,10 +160,8 @@ public partial class LibraryPage : UserControl
 
     private void OnScrollViewerPointerReleased(object? sender, PointerReleasedEventArgs e)
     {
-        // Check if the click was on the ScrollViewer itself (empty area)
         if (e.InitialPressMouseButton == MouseButton.Left)
         {
-            // Clear all selections
             foreach (GameItemViewModel game in _viewModel.Games)
             {
                 game.IsSelected = false;
