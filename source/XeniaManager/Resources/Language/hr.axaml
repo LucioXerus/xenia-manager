@@ -133,6 +133,9 @@
     <sys:String x:Key="LibraryPage.DeleteSelected.Error.Message">Nije uspjelo brisanje odabranih igara:&#10;{0}</sys:String>
     <sys:String x:Key="LibraryPage.ClearSelection.Button">Očisti odabir</sys:String>
 
+    <!-- Library Game ToolTips -->
+    <sys:String x:Key="LibraryPage.Game.ToolTip.Path.Invalid">Putanja do igre je nevaljana</sys:String>
+
     <!-- Compatibility Rating -->
     <sys:String x:Key="CompatibilityRating.Unknown">Nepoznato</sys:String>
     <sys:String x:Key="CompatibilityRating.Unplayable">Nemoguće igrati</sys:String>
@@ -257,6 +260,17 @@
     <sys:String x:Key="ManagePage.Content.RedownloadBindings.Success.Message">Datoteka postavki vezanja za Xenia {0} uspješno je ponovno preuzeta.</sys:String>
     <sys:String x:Key="ManagePage.Content.RedownloadBindings.Failed.Title">Ponovno preuzimanje nije uspjelo</sys:String>
     <sys:String x:Key="ManagePage.Content.RedownloadBindings.Failed.Message">Ponovno preuzimanje datoteke postavki vezanja nije uspjelo.&#10;Greška: {0}</sys:String>
+    <sys:String x:Key="ManagePage.Content.ClearShaderCache.Title">Očisti predmemoriju shadera</sys:String>
+    <sys:String x:Key="ManagePage.Content.ClearShaderCache.Description">Izbrišite datoteke predmemorije shadera</sys:String>
+    <sys:String x:Key="ManagePage.Content.ClearShaderCache.Button">Očisti</sys:String>
+    <sys:String x:Key="ManagePage.Content.ClearShaderCache.NoEmulator.Title">Emulator nije instaliran</sys:String>
+    <sys:String x:Key="ManagePage.Content.ClearShaderCache.NoEmulator.Message">Instalirajte barem jednu verziju Xenia emulatora prije čišćenjashadera.</sys:String>
+    <sys:String x:Key="ManagePage.Content.ClearShaderCache.Success.Title">Predmemorija shadera očišćena</sys:String>
+    <sys:String x:Key="ManagePage.Content.ClearShaderCache.Success.Message">Uspješno je očišćeno {0} datoteka predmemorije shadera za Xenia {1}.</sys:String>
+    <sys:String x:Key="ManagePage.Content.ClearShaderCache.NotFound.Title">Predmemorija shadera nije pronađena</sys:String>
+    <sys:String x:Key="ManagePage.Content.ClearShaderCache.NotFound.Message">Nisu pronađene datoteke predmemorije shadera za Xenia {0}.&#10;Pokrenite bilo koju igru da biste generirali predmemoriju shadera.</sys:String>
+    <sys:String x:Key="ManagePage.Content.ClearShaderCache.Failed.Title">Čišćenje nije uspjelo</sys:String>
+    <sys:String x:Key="ManagePage.Content.ClearShaderCache.Failed.Message">Čišćenje predmemorije shadera za Xenia {0} nije uspjelo.&#10;Greška: {1}</sys:String>
 
     <!-- Settings Page -->
     <sys:String x:Key="SettingsPage.Ui.Title">Postavke sučelja</sys:String>
@@ -474,6 +488,9 @@
     <sys:String x:Key="GameDetailsEditor.InfobarAutomaticDetectionText">ID naslova i medijski ID automatski se prepoznaju i ne mogu se mijenjati.</sys:String>
     <sys:String x:Key="GameDetailsEditor.TitleId">ID naslova</sys:String>
     <sys:String x:Key="GameDetailsEditor.MediaId">Medijski ID</sys:String>
+    <sys:String x:Key="GameDetailsEditor.AlternativeIds">Alternativni ID-evi</sys:String>
+    <sys:String x:Key="GameDetailsEditor.AlternativeIdsWatermark">Unesite alternativni ID...</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Add">Dodaj</sys:String>
     <sys:String x:Key="GameDetailsEditor.GameTitle">Naziv igre</sys:String>
     <sys:String x:Key="GameDetailsEditor.GameTitleWatermark">Unesite naziv igre</sys:String>
     <sys:String x:Key="GameDetailsEditor.GamePath">Putanja igre</sys:String>
@@ -740,6 +757,7 @@
     <sys:String x:Key="ConfigUiSettings.Section.HID">Ulazni uređaji</sys:String>
     <sys:String x:Key="ConfigUiSettings.Section.HID.WinKey">WinKey tipke</sys:String>
     <sys:String x:Key="ConfigUiSettings.Section.Kernel">Jezgra</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Section.Logging">Zapisivanje</sys:String>
     <sys:String x:Key="ConfigUiSettings.Section.Memory">Memorija</sys:String>
     <sys:String x:Key="ConfigUiSettings.Section.Storage">Pohrana</sys:String>
     <sys:String x:Key="ConfigUiSettings.Section.UI">Sučelje</sys:String>
@@ -970,6 +988,16 @@
     <sys:String x:Key="ConfigUiSettings.Kernel.cl.Title">Naredbeni redak</sys:String>
     <sys:String x:Key="ConfigUiSettings.Kernel.cl.Comment">Navedite dodatni naredbeni redak koji se prosljeđuje gostu</sys:String>
 
+    <!-- Config UI Settings - Logging Options -->
+    <sys:String x:Key="ConfigUiSettings.Logging.enable_console.Title">Omogući konzolu</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Logging.enable_console.Comment">Otvara prozor za konzolu zajedno sa glavnim prozorom</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Logging.log_level.Title">Razina zapisivanja</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Logging.log_level.Comment">Postavi minimalnu razinu za zapisivanje</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Logging.log_level.option.0">Greška</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Logging.log_level.option.1">Upozorenje</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Logging.log_level.option.2">Informacije</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Logging.log_level.option.3">Debugiranje</sys:String>
+
     <!-- Config UI Settings - Memory Options -->
     <sys:String x:Key="ConfigUiSettings.Memory.protect_zero.Title">Zaštiti nultu stranicu</sys:String>
     <sys:String x:Key="ConfigUiSettings.Memory.protect_zero.Comment">Zaštiti nultu stranicu od čitanja i pisanja</sys:String>
@@ -1119,8 +1147,6 @@
     <sys:String x:Key="AboutPage.Credits.NLog.ToolTip"> - Fleksibilan framework za zapisivanje za .NET</sys:String>
     <sys:String x:Key="AboutPage.Credits.Xbox360Toolkit.Title">Xbox 360 Toolkit</sys:String>
     <sys:String x:Key="AboutPage.Credits.Xbox360Toolkit.ToolTip"> - Dohvaćanje detalja igre</sys:String>
-    <sys:String x:Key="AboutPage.Credits.Tomlyn.Title">Tomlyn</sys:String>
-    <sys:String x:Key="AboutPage.Credits.Tomlyn.ToolTip"> - Parser TOML konfiguracijskih datoteka</sys:String>
     <sys:String x:Key="AboutPage.Credits.SharpCompress.Title">SharpCompress</sys:String>
     <sys:String x:Key="AboutPage.Credits.SharpCompress.ToolTip"> - Upravljanje arhivama i kompresijom</sys:String>
     <sys:String x:Key="AboutPage.FooterNote.Text">Ova aplikacija nije povezana, odobrena niti sponzorirana od strane Microsoft Corporation ili Xenia projekta na bilo koji način. Sve robne marke, logotipi i nazivi brendova vlasništvo su svojih vlasnika.&#10;Xbox 360 je registrirana robna marka Microsoft Corporation u Sjedinjenim Američkim Državama i/ili drugim zemljama.&#10;Xenia je registrirana robna marka Xenia projekta.&#10;Sva pozivanja na ove ili druge robne marke napravljena su isključivo u svrhu identificiranja kompatibilnosti ili funkcionalnosti i ne impliciraju nikakvu povezanost s ili odobrenje od strane vlasnika robnih marki.&#10;Ova aplikacija namijenjena je isključivo u obrazovne i informativne svrhe. Ne sadrži niti distribuira bilo kakav sadržaj zaštićen autorskim pravima u vlasništvu Microsoft Corporation ili bilo koje treće strane. Korisnici su isključivo odgovorni za osiguravanje da njihovo korištenje ovog softvera bude u skladu sa svim primjenjivim zakonima, uključujući zakone o autorskim pravima i licenciranju.&#10;Svako korištenje ove aplikacije za pokretanje ili interakciju s vlasničkim softverom ili firmwareom mora biti provedeno u granicama relevantnih ugovora o licenciranju krajnjih korisnika (EULA). Programeri i distributeri ove aplikacije ne odobravaju niti podržavaju pirateriju u bilo kojem obliku.&#10;Ova aplikacija pruža se "kakva jest" bez ikakvih jamstava, izričitih ili impliciranih. Koristite na vlastitu odgovornost.</sys:String>

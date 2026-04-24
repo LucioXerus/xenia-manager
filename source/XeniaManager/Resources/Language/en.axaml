@@ -133,6 +133,9 @@
     <sys:String x:Key="LibraryPage.DeleteSelected.Error.Message">Failed to delete selected games:&#10;{0}</sys:String>
     <sys:String x:Key="LibraryPage.ClearSelection.Button">Clear Selection</sys:String>
 
+    <!-- Library Game ToolTips -->
+    <sys:String x:Key="LibraryPage.Game.ToolTip.Path.Invalid">Game path is invalid</sys:String>
+
     <!-- Compatibility Rating -->
     <sys:String x:Key="CompatibilityRating.Unknown">Unknown</sys:String>
     <sys:String x:Key="CompatibilityRating.Unplayable">Unplayable</sys:String>
@@ -257,6 +260,17 @@
     <sys:String x:Key="ManagePage.Content.RedownloadBindings.Success.Message">Bindings file for Xenia {0} has been successfully redownloaded.</sys:String>
     <sys:String x:Key="ManagePage.Content.RedownloadBindings.Failed.Title">Redownload Failed</sys:String>
     <sys:String x:Key="ManagePage.Content.RedownloadBindings.Failed.Message">Failed to redownload bindings file.&#10;Error: {0}</sys:String>
+    <sys:String x:Key="ManagePage.Content.ClearShaderCache.Title">Clear Shader Cache</sys:String>
+    <sys:String x:Key="ManagePage.Content.ClearShaderCache.Description">Delete shader cache files</sys:String>
+    <sys:String x:Key="ManagePage.Content.ClearShaderCache.Button">Clear</sys:String>
+    <sys:String x:Key="ManagePage.Content.ClearShaderCache.NoEmulator.Title">No Emulator Installed</sys:String>
+    <sys:String x:Key="ManagePage.Content.ClearShaderCache.NoEmulator.Message">Please install at least one version of Xenia before clearing shader cache.</sys:String>
+    <sys:String x:Key="ManagePage.Content.ClearShaderCache.Success.Title">Shader Cache Cleared</sys:String>
+    <sys:String x:Key="ManagePage.Content.ClearShaderCache.Success.Message">Successfully cleared {0} shader cache files for Xenia {1}.</sys:String>
+    <sys:String x:Key="ManagePage.Content.ClearShaderCache.NotFound.Title">No Shader Cache Found</sys:String>
+    <sys:String x:Key="ManagePage.Content.ClearShaderCache.NotFound.Message">No shader cache files found for Xenia {0}.&#10;Run a game to generate shader cache.</sys:String>
+    <sys:String x:Key="ManagePage.Content.ClearShaderCache.Failed.Title">Clear Failed</sys:String>
+    <sys:String x:Key="ManagePage.Content.ClearShaderCache.Failed.Message">Failed to clear shader cache for Xenia {0}.&#10;Error: {1}</sys:String>
 
     <!-- Settings Page -->
     <sys:String x:Key="SettingsPage.Ui.Title">UI Settings</sys:String>
@@ -474,6 +488,9 @@
     <sys:String x:Key="GameDetailsEditor.InfobarAutomaticDetectionText">Title ID and Media ID are automatically detected and cannot be changed.</sys:String>
     <sys:String x:Key="GameDetailsEditor.TitleId">Title ID</sys:String>
     <sys:String x:Key="GameDetailsEditor.MediaId">Media ID</sys:String>
+    <sys:String x:Key="GameDetailsEditor.AlternativeIds">Alternative IDs</sys:String>
+    <sys:String x:Key="GameDetailsEditor.AlternativeIdsWatermark">Enter alternative ID...</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Add">Add</sys:String>
     <sys:String x:Key="GameDetailsEditor.GameTitle">Game Title</sys:String>
     <sys:String x:Key="GameDetailsEditor.GameTitleWatermark">Enter game title</sys:String>
     <sys:String x:Key="GameDetailsEditor.GamePath">Game Path</sys:String>
@@ -740,6 +757,7 @@
     <sys:String x:Key="ConfigUiSettings.Section.HID">HID</sys:String>
     <sys:String x:Key="ConfigUiSettings.Section.HID.WinKey">WinKey Bindings</sys:String>
     <sys:String x:Key="ConfigUiSettings.Section.Kernel">Kernel</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Section.Logging">Logging</sys:String>
     <sys:String x:Key="ConfigUiSettings.Section.Memory">Memory</sys:String>
     <sys:String x:Key="ConfigUiSettings.Section.Storage">Storage</sys:String>
     <sys:String x:Key="ConfigUiSettings.Section.UI">UI</sys:String>
@@ -970,6 +988,16 @@
     <sys:String x:Key="ConfigUiSettings.Kernel.cl.Title">Command Line</sys:String>
     <sys:String x:Key="ConfigUiSettings.Kernel.cl.Comment">Specify additional command-line provided to guest</sys:String>
 
+    <!-- Config UI Settings - Logging Options -->
+    <sys:String x:Key="ConfigUiSettings.Logging.enable_console.Title">Enable Console</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Logging.enable_console.Comment">Open a console window with the main window</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Logging.log_level.Title">Log Level</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Logging.log_level.Comment">Maximum level to be logged</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Logging.log_level.option.0">Error</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Logging.log_level.option.1">Warning</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Logging.log_level.option.2">Info</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Logging.log_level.option.3">Debug</sys:String>
+
     <!-- Config UI Settings - Memory Options -->
     <sys:String x:Key="ConfigUiSettings.Memory.protect_zero.Title">Protect Zero</sys:String>
     <sys:String x:Key="ConfigUiSettings.Memory.protect_zero.Comment">Protect the zero page from reads and writes</sys:String>
@@ -1119,8 +1147,6 @@
     <sys:String x:Key="AboutPage.Credits.NLog.ToolTip"> - Flexible logging framework for .NET</sys:String>
     <sys:String x:Key="AboutPage.Credits.Xbox360Toolkit.Title">Xbox 360 Toolkit</sys:String>
     <sys:String x:Key="AboutPage.Credits.Xbox360Toolkit.ToolTip"> - Game details parsing</sys:String>
-    <sys:String x:Key="AboutPage.Credits.Tomlyn.Title">Tomlyn</sys:String>
-    <sys:String x:Key="AboutPage.Credits.Tomlyn.ToolTip"> - TOML configuration file parser</sys:String>
     <sys:String x:Key="AboutPage.Credits.SharpCompress.Title">SharpCompress</sys:String>
     <sys:String x:Key="AboutPage.Credits.SharpCompress.ToolTip"> - Archive and compression handling</sys:String>
     <sys:String x:Key="AboutPage.FooterNote.Text">This application is not affiliated with, endorsed by, or sponsored by Microsoft Corporation or the Xenia Project in any way. All trademarks, logos, and brand names are the property of their respective owners.&#10;Xbox 360 is a registered trademark of Microsoft Corporation in the United States and/or other countries.&#10;Xenia is a registered trademark of the Xenia Project.&#10;Any references to these or other trademarks are made solely for the purpose of identifying compatibility or functionality and do not imply any association with or endorsement by the trademark holders.&#10;This software is intended for educational and informational purposes only. It does not contain or distribute any copyrighted content owned by Microsoft Corporation or any third party. Users are solely responsible for ensuring that their use of this software complies with all applicable laws, including copyright and licensing laws.&#10;Any use of this application to run or interact with proprietary software or firmware must be conducted within the bounds of relevant end-user license agreements (EULAs). The developers and distributors of this application do not condone or support piracy in any form.&#10;This application is provided "as is" without warranty of any kind, express or implied. Use at your own risk.</sys:String>
