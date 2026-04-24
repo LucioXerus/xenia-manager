@@ -36,7 +36,6 @@ public partial class GameItemViewModel : ViewModelBase
 {
     [ObservableProperty] private Game _game;
     [ObservableProperty] private bool _isSelected;
-    [ObservableProperty] private bool _isControllerSelected = false;
     private readonly LibraryPageViewModel _library;
     private IMessageBoxService _messageBoxService { get; set; }
     private Core.Settings.Settings _settings { get; set; }
