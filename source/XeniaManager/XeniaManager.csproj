@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <OutputType>WinExe</OutputType>
         <TargetFramework>net10.0</TargetFramework>
@@ -8,6 +8,7 @@
         <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
         <AssemblyVersion>4.1.2</AssemblyVersion>
         <ApplicationIcon>Assets\icon.ico</ApplicationIcon>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
 
     <ItemGroup>
@@ -16,6 +17,10 @@
 
     <ItemGroup>
       <ProjectReference Include="..\XeniaManager.Core\XeniaManager.Core.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="ppy.SDL3-CS" Version="2026.320.0" />
     </ItemGroup>
 
     <ItemGroup>

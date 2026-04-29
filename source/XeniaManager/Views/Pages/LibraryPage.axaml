@@ -167,11 +167,13 @@
         </Grid>
 
         <!-- Games (Grid View) -->
-        <ScrollViewer Grid.Row="2"
+        <ScrollViewer x:Name="GamesScrollViewer"
+                      Grid.Row="2"
                       Padding="8"
                       IsVisible="{Binding IsGridView}"
                       PointerReleased="OnScrollViewerPointerReleased">
-            <controls:ItemsRepeater Margin="0,0,10,0"
+            <controls:ItemsRepeater x:Name="GamesItemsRepeater"
+                                    Margin="0,0,10,0"
                                     ItemsSource="{Binding Games}">
                 <controls:ItemsRepeater.Layout>
                     <controls:UniformGridLayout MinItemWidth="{Binding MinItemWidth}"
@@ -193,11 +195,15 @@
                                 VerticalContentAlignment="Stretch"
                                 Tapped="OnGameButtonTapped"
                                 DoubleTapped="OnGameButtonDoubleTapped"
-                                Tag="{Binding}"
-                                Classes.selected="{Binding IsSelected}">
-                            <Button.Styles>
+                                 Tag="{Binding}"
+                                 Classes.selected="{Binding IsSelected}"
+                                 Classes.controller-selected="{Binding IsControllerSelected}">
+                             <Button.Styles>
                                 <Style Selector="Button.selected">
                                     <Setter Property="BorderBrush" Value="{DynamicResource AccentFillColorDefaultBrush}" />
+                                </Style>
+                                <Style Selector="Button.controller-selected">
+                                    <Setter Property="BorderBrush" Value="#00FF00" />
                                 </Style>
                             </Button.Styles>
                             <ToolTip.Tip>
